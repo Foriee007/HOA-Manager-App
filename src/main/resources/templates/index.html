@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}"/>
+    <title>Landing Page</title>
+</head>
+<body>
+
+<header th:replace="/fragments/navbar.html">
+</header>
+<div class="flight-welcome">
+    <div class="container text-center">
+        <div style="margin-left: -50px;">
+            <form action="#" th:action="@{/register/manager}" method="get">
+                <button type="submit" class="btn btn-primary mt-4">List Parking</button>
+            </form>
+            <form action="#" th:action="@{/register/resident}" method="get">
+                <button type="submit" class="btn btn-primary mt-4">Get Parking spot</button>
+            </form>
+            <form action="#" th:action="@{/login}" method="get">
+                <button type="submit" class="btn btn-primary mt-4">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+<!--<footer th:replace="/fragments/footer.html">
+</footer>-->
+</body>
+</html>

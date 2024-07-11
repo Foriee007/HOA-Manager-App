@@ -1,0 +1,19 @@
+<footer th:fragment="footer">
+    <ul class="footer-ul">
+        <li  th:text="#{copyRights}">&COPY All rights reserved <a th:href="@{'/'}">VillageArtist</a></li>
+        <li th:text="#{faq}">FAQ</li>
+        <li th:text="#{contact}">Contact us</li>
+        <li>
+            <form th:method="get">
+                <label th:text="#{language}" for="lang"></label>
+                <select
+                        onchange="this.form.submit()"
+                        id="lang"
+                        name="lang">
+                    <option value="en_US" th:selected="${#locale.toString()} == 'en_US'">English</option>
+                    <option value="bg_BG" th:selected="${#locale.toString()} == 'bg_BG'">Български</option>
+                </select>
+            </form>
+        </li>
+    </ul>
+</footer>
