@@ -53,8 +53,7 @@ public class UserServiceImpl implements UserService {
             propertyManagerRepository.save(propertyManager);
         }
 
-        User savedUser = userRepository.save(user);
-        return savedUser;
+        return userRepository.save(user);
     }
 
     private User mapRegistrationDtoToUser(UserRegisterBindingModel registerBindingModel) {
