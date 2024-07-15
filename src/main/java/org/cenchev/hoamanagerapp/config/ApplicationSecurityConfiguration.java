@@ -30,7 +30,7 @@ public class ApplicationSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         // when CSRF disabling is needed for testing csrf.disable()
-        http.csrf(csrf -> csrf.disable());
+        //http.csrf(csrf -> csrf.disable());
 
         http.authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/css/**", "/js/**", "/webjars/**", "/img/**").permitAll()
