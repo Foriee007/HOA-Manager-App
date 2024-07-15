@@ -1,4 +1,3 @@
-/*
 package org.cenchev.hoamanagerapp.config;
 
 import org.springframework.context.MessageSource;
@@ -8,6 +7,8 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+
+import java.util.Locale;
 
 @Configuration
 public class I18nConfig {
@@ -31,8 +32,7 @@ public class I18nConfig {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:i18n/messages");
         messageSource.setDefaultEncoding("UTF-8");
-        messageSource.setDefaultLocale(Locale.ENGLISH)
+        messageSource.setDefaultLocale(Locale.ENGLISH);
         return messageSource;
     }
 }
-*/

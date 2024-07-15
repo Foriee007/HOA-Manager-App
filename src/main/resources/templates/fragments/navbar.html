@@ -17,19 +17,28 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav ml-auto py-2 text-end">
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="isAnonymous()">
                     <a class="nav-link" href="/register/manager">Become HOA Manager</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/register/resident">Register Portal</a>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" href="/register/resident">Resident Portal</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="isAnonymous()">
                     <a class="nav-link" href="/login">Login</a>
                 </li>
+                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="nav-link" th:href="@{/admin/dashboard}">Dashboard</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ROLE_RESIDENT')">
+                    <a class="nav-link" th:href="@{/search}">Search Garage</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ROLE_PROPERTY_MANAGER')">
+                    <a class="nav-link" th:href="@{/manager/dashboard}">Dashboard</a>
+                </li>
                 <!-- Logout -->
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
                     <div class="d-flex justify-content-end">
-                        <form class="form-inline" method="post" href="/logout">
+                        <form class="form-inline" method="post" th:action="@{/logout}">
                             <button class="btn btn-link nav-link" type="submit"><i class="bi bi-box-arrow-right"></i> Logout</button>
                         </form>
                     </div>
