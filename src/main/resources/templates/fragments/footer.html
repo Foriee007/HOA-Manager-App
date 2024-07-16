@@ -1,8 +1,8 @@
 <footer class="py-3 my-4" th:fragment="footer">
     <div class="nav justify-content-center pb-3 mb-3">
-        <span class="mb-3 mb-md-0 text-body-secondary" th:text="#{copyRights}">All rights reserved <a th:href="@{'/'}"> HOA Manager</a></span>
-        <span class="mb-3 mb-md-0 text-body-secondary"><a>&nbsp;</a><a th:text="#{faq}" th:href="@{'/'}">FAQ</a><a> |</a><a>&nbsp;</a></span>
-        <span class="mb-3 mb-md-0 text-body-secondary"><a th:text="#{contact}" th:href="@{'/'}"> Contact</a><a> |</a><a>&nbsp; </a></span>
+        <span class="mb-3 mb-md-0 text-body-secondary" th:text="#{copyRights}">All rights reserved <a th:href="@{/contact-us}"> HOA Manager</a></span>
+        <span class="mb-3 mb-md-0 text-body-secondary"><a>&nbsp;</a><a th:text="#{faq}" th:href="@{/contact-us}">FAQ</a><a> |</a><a>&nbsp;</a></span>
+        <span class="mb-3 mb-md-0 text-body-secondary"><a th:text="#{contact}" th:href="@{/contact-us}"> Contact</a><a> |</a><a>&nbsp; </a></span>
         <div class="mb-3 mb-md-0 text-body-secondary">
             <form th:method="get">
                 <label th:text="#{language}" for="lang"><a>&nbsp; </a></label>

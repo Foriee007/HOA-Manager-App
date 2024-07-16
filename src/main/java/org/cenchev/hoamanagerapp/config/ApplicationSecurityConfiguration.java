@@ -34,10 +34,10 @@ public class ApplicationSecurityConfiguration {
 
         http.authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/css/**", "/js/**", "/webjars/**", "/img/**").permitAll()
-                                .requestMatchers("/", "/index", "/register/**").permitAll()
+                                .requestMatchers("/", "/index", "/register/**","/contact-us").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN") //hasRole(RoleEnum.ADMIN.name())
-                                .requestMatchers("/resident/**").hasRole("RESIDENT")
-                                .requestMatchers("/manager/**").hasRole("PROPERTY_MANAGER")
+                                .requestMatchers("/resident/**").hasRole("RESIDENT") // resident group html
+                                .requestMatchers("/manager/**").hasRole("PROPERTY_MANAGER") // property manager group html
                                 .anyRequest().authenticated())
                 .formLogin(
                         form -> form

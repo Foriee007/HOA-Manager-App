@@ -4,6 +4,17 @@ spring:
     username: root
     password: kod1313
     url: "jdbc:mysql://localhost:3306/hoamanagerapp?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC"
+  mail:
+    host: smtp-relay.brevo.com
+    port: 587
+    username: 78adb8001@smtp-brevo.com
+    password: KeyIDBrevoCom
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
