@@ -26,7 +26,7 @@ public class ApplicationBeanConfiguration {
         return new Cloudinary(
                 Map.of(
                         "cloud_name", "der4tss5f",
-                        "api_key", "526795939725999",
+                        "api_key", "526795939725979",
                         "api_secret", "Lgng9Z4hMIL62HIIsxqH0a75lvE"
                 )
         );

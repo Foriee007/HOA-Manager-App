@@ -19,7 +19,7 @@ public class Address {
     private String usZipCode;
 
     @Column(nullable = false)
-    private String State;
+    private String state;
 
     public Address() {
     }
@@ -57,10 +57,10 @@ public class Address {
     }
 
     public String getState() {
-        return State;
+        return state;
     }
 
     public void setState(String state) {
-        State = state;
+        this.state = state;
     }
 }
