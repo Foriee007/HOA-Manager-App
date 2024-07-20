@@ -25,9 +25,6 @@ public class Garage implements Serializable {
 
     private double dayUsePrice;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Image image;
-
     @OneToMany(mappedBy = "garage", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Availability> availabilityList = new ArrayList<>();
 
@@ -82,11 +79,4 @@ public class Garage implements Serializable {
         this.availabilityList = availabilityList;
     }
 
-    public Image getImage() {
-        return image;
     }
-
-    public void setImage(Image image) {
-        this.image = image;
-    }
-}

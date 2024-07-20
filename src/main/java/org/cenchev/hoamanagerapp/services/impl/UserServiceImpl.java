@@ -1,4 +1,4 @@
-package org.cenchev.hoamanagerapp.service.impl;
+package org.cenchev.hoamanagerapp.services.impl;
 
 import org.cenchev.hoamanagerapp.exceptions.UserDuplicationException;
 import org.cenchev.hoamanagerapp.model.bindings.UserRegisterBindingModel;
@@ -11,7 +11,7 @@ import org.cenchev.hoamanagerapp.repository.PropertyManagerRepository;
 import org.cenchev.hoamanagerapp.repository.ResidentRepository;
 import org.cenchev.hoamanagerapp.repository.RoleRepository;
 import org.cenchev.hoamanagerapp.repository.UserRepository;
-import org.cenchev.hoamanagerapp.service.UserService;
+import org.cenchev.hoamanagerapp.services.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -54,6 +54,11 @@ public class UserServiceImpl implements UserService {
         }
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     private User mapRegistrationDtoToUser(UserRegisterBindingModel registerBindingModel) {

@@ -29,7 +29,18 @@ public class Home implements Serializable {
     @JoinColumn(nullable = false)
     private PropertyManager propertyManager;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Image image;
+
     public Home() {
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public Long getId() {

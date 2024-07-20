@@ -1,10 +1,10 @@
-package org.cenchev.hoamanagerapp.controller;
+package org.cenchev.hoamanagerapp.controllers;
 
 import jakarta.validation.Valid;
 import org.cenchev.hoamanagerapp.exceptions.UserDuplicationException;
 import org.cenchev.hoamanagerapp.model.bindings.UserRegisterBindingModel;
 import org.cenchev.hoamanagerapp.model.enums.RoleType;
-import org.cenchev.hoamanagerapp.service.UserService;
+import org.cenchev.hoamanagerapp.services.UserService;
 import org.cenchev.hoamanagerapp.utils.RedirectUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

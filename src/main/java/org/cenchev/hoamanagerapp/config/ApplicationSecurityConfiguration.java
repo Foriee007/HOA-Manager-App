@@ -1,6 +1,5 @@
 package org.cenchev.hoamanagerapp.config;
 
-import org.cenchev.hoamanagerapp.service.UserService;
 import org.cenchev.hoamanagerapp.utils.CustomAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

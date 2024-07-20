@@ -16,7 +16,7 @@ public class Address {
     private String city;
 
     @Column(nullable = false)
-    private String zipcode;
+    private String usZipCode;
 
     @Column(nullable = false)
     private String State;
@@ -48,12 +48,12 @@ public class Address {
         this.city = city;
     }
 
-    public String getZipcode() {
-        return zipcode;
+    public String getUsZipCode() {
+        return usZipCode;
     }
 
-    public void setZipcode(String zipcode) {
-        this.zipcode = zipcode;
+    public void setUsZipCode(String zipcode) {
+        this.usZipCode = zipcode;
     }
 
     public String getState() {

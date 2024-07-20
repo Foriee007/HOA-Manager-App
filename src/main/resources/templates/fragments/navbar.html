@@ -30,7 +30,7 @@
                     <a class="nav-link" th:href="@{/admin/dashboard}" th:text="#{dashboard}">Dashboard</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('ROLE_RESIDENT')">
-                    <a class="nav-link" th:href="@{/search}" th:text="#{searchGarage}">Search Garage</a>
+                    <a class="nav-link" th:href="@{/resident/search}" th:text="#{searchGarage}">Search Garage</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('ROLE_PROPERTY_MANAGER')">
                     <a class="nav-link" th:href="@{/manager/dashboard}" th:text="#{dashboard}">Dashboard</a>

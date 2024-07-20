@@ -12,7 +12,7 @@ public class RedirectUtil {
             if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
                 return "/admin/dashboard";
             } else if (grantedAuthority.getAuthority().equals("ROLE_RESIDENT")) {
-                return "/search";
+                return "/resident/search";
             } else if (grantedAuthority.getAuthority().equals("ROLE_PROPERTY_MANAGER")) {
                 return "/manager/dashboard";
             }
