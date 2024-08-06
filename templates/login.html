@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}"/>
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <title>Login Page</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:insert="~{fragments/navbar.html}">
+</header>
+<div class="flex-grow-1 m-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger" th:text="#{invalidEmail}">Invalid Email or Password</div>
+                </div>
+                <div th:if="${param.logout}">
+                    <div class="alert alert-success" th:text="#{successfully}">You have successfully logged out</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-center" th:text="#{login}">Login</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" th:action="@{/login}">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="username" th:text="#{email}">Email:</label>
+                                <input class="form-control" id="username" name="username" type="email" placeholder="Email" autofocus>
+                                <small class="form-text text-muted">e.g. example@gmail.com</small>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="password" th:text="#{password}">Password:</label>
+                                <input class="form-control" id="password" name="password" type="password"
+                                       placeholder="Enter password">
+                            </div>
+                            <div class="form-group mb-3">
+                                <button type="submit" class="btn btn-primary" th:text="#{login}">Login</button>
+                                <span> <a th:text="#{notRegister}">Don't Have Access?</a> <a th:href="@{/register/resident}" th:text="#{registerHere}">Register here!</a></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:insert="~{fragments/footer.html}">
+</footer>
+
+</body>
+
+</html>
