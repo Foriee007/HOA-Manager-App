@@ -177,16 +177,35 @@ public class HomeServiceImpl implements HomeService {
         homeRepository.delete(home);
     }
     // Search Available home parking  -> Resident controller POST Search-Result
+    //
     @Override
+    @Transactional
     public List<AvailableHomeParkingDTO> findAvailableHomesByLocationAndDate(String city, String state, LocalDate startDate, LocalDate endDate) {
         validStartAndEndDate(startDate, endDate);
 
-        Long numberOfDays = ChronoUnit.DAYS.between(startDate, endDate);
+        //Long numberOfDays = ChronoUnit.DAYS.between(startDate, endDate);
         //List<Home> homesWithAvailableParking = homeRepository.findHomesByCityAndState(city, state, startDate, endDate, numberOfDays);
         List<Home> homesWithAvailableParking = homeRepository.findHomesByCityAndState(city, state);
 
 
-        return List.of();
+        return homesWithAvailableParking.stream().map(home -> mapHomeToHomesWithAvailableParking(home)).collect(Collectors.toList());
+    }
+
+    private AvailableHomeParkingDTO mapHomeToHomesWithAvailableParking(Home home) {
+        List<GarageDTO> garageDTOs = home.getSpot().stream()
+                .map(garageService::mapGarageSpotsToGarageDTO)// convert garage to DTO format
+                .collect(Collectors.toList());
+
+        AddressDTO addressDTO = addressService.mapAddressToAddressDto(home.getAddress());
+
+        AvailableHomeParkingDTO availableHomeParkingDTO = new AvailableHomeParkingDTO();  // initializing data to  AvailableHomeParkingDTO
+        availableHomeParkingDTO.setId(home.getId());
+        availableHomeParkingDTO.setName(home.getName());
+        availableHomeParkingDTO.setAddressDTO(addressDTO);
+        availableHomeParkingDTO.setGarageDTOList(garageDTOs);
+        availableHomeParkingDTO.setImageUrl(home.getImage() != null ? home.getImage().getUrl() : null); // Set image URL
+
+        return  availableHomeParkingDTO;
     }
 
 

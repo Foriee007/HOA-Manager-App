@@ -14,8 +14,17 @@ public class AvailableHomeParkingDTO {
 
     private Integer maxAvailableEVSpots;
     private Integer maxAvailableAllDaySpots;
+    private String imageUrl;
 
     public AvailableHomeParkingDTO() {
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {

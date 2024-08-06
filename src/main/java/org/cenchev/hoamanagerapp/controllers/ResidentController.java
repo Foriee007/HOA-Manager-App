@@ -74,13 +74,13 @@ public class ResidentController {
 
         } catch (DateTimeParseException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Invalid date format. Please use the search form.");
-            return "redirect:resident/search";
+            return "redirect:/resident/search";
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Invalid arguments provided.");
-            return "redirect:resident/search";
+            return "redirect:/resident/search";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "An unexpected error occurred. Please try again later.");
-            return "redirect:resident/search";
+            return "redirect:/resident/search";
         }
         return "resident/search-results";
     }
