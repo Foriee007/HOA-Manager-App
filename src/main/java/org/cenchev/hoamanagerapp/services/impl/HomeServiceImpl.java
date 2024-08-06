@@ -4,10 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.cenchev.hoamanagerapp.exceptions.HomeEntityAlreadyExistsException;
 import org.cenchev.hoamanagerapp.exceptions.ObjectAlreadyExistsException;
-import org.cenchev.hoamanagerapp.model.dto.AddressDTO;
-import org.cenchev.hoamanagerapp.model.dto.GarageDTO;
-import org.cenchev.hoamanagerapp.model.dto.HomeDTO;
-import org.cenchev.hoamanagerapp.model.dto.HomeRegistrationDTO;
+import org.cenchev.hoamanagerapp.model.dto.*;
 import org.cenchev.hoamanagerapp.model.entities.*;
 import org.cenchev.hoamanagerapp.repository.HomeRepository;
 import org.cenchev.hoamanagerapp.repository.ImageRepository;
@@ -18,6 +15,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -154,6 +153,8 @@ public class HomeServiceImpl implements HomeService {
         return mapHomeToHomeDto(getExistingHome);
     }
 
+
+
     private boolean homeByNameAndIdExist(String name, Long homeId) {
         Optional<Home> checkExistingHomeName = homeRepository.findByName(name);
         return checkExistingHomeName.isPresent() && ! checkExistingHomeName.get().getId().equals(homeId);
@@ -175,6 +176,18 @@ public class HomeServiceImpl implements HomeService {
                 .orElseThrow(() -> new EntityNotFoundException("Home not found"));
         homeRepository.delete(home);
     }
+    // Search Available home parking  -> Resident controller POST Search-Result
+    @Override
+    public List<AvailableHomeParkingDTO> findAvailableHomesByLocationAndDate(String city, String state, LocalDate startDate, LocalDate endDate) {
+        validStartAndEndDate(startDate, endDate);
+
+        Long numberOfDays = ChronoUnit.DAYS.between(startDate, endDate);
+        //List<Home> homesWithAvailableParking = homeRepository.findHomesByCityAndState(city, state, startDate, endDate, numberOfDays);
+        List<Home> homesWithAvailableParking = homeRepository.findHomesByCityAndState(city, state);
+
+
+        return List.of();
+    }
 
 
     private Image createImage(MultipartFile file) throws IOException {
@@ -189,5 +202,16 @@ public class HomeServiceImpl implements HomeService {
     private String formatText(String text) {
         return StringUtils.capitalize(text.trim());
     }
+
+    private void validStartAndEndDate(LocalDate startDate, LocalDate endDate) {
+        if (startDate.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Start date cannot be in the past");
+        }
+        if (endDate.isBefore(startDate.plusDays(1))) {
+            throw new IllegalArgumentException("End date must be after start date");
+        }
+    }
+
+
 
 }

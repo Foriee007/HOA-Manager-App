@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}"/>
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css}"/>
+    <title>Search Property</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:insert="~{fragments/navbar.html}">
+</header>
+<div class="flex-grow-1 m-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mb-5">
+                    <h2>Search results for "<span th:text="${city}">City</span>"</h2>
+                    <h2>Search results for "<span th:text="${state}">State</span>"</h2>
+
+                </div>
+                <div th:if="${noHomeLotsFound}" class="alert alert-danger text-center">
+                    <p class="fs-5">No Home parking lot found within the city.<br>Please try again with different city name.</p>
+                    <div class="mt-3">
+                        <a href="/resident/search" class="btn btn-primary">Go Back to Search</a>
+                    </div>
+                </div>
+                <div th:each="home : ${homeLots}">
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-12">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold" th:text="${home.name}">Property Name</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <!-- Image placeholder -->
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p class="card-text fw-bold">Available Parking</p>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <p class="card-text">EV parking:</p>
+                                                    <p class="card-text">All day parking:</p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <p class="card-text"><span
+                                                            th:text="${home.maxAvailableEVSpots}">0</span></p>
+                                                    <p class="card-text"><span
+                                                            th:text="${home.maxAvailableAllDaySpots}">0</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="card-text fw-bold">Price per Night</p>
+                                            <th:block th:each="garage : ${home.garageDTOList}">
+                                                <p class="card-text" th:if="${garage.spaceType.name() == 'EV'}">
+                                                    $ <span th:text="${garage.getPricePerDay()}"></span>
+                                                </p>
+                                                <p class="card-text" th:if="${garage.spaceType.name() == 'REGULAR'}">
+                                                    $ <span th:text="${garage.getPricePerDay()}"></span>
+                                                </p>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-center">
+                                <!--th:href="@{/home-details/{id}(id=${home.id}, startDate=${startDate}, endDate=${endDate})}"--><a class="btn btn-primary w-100 my-2 mx-3">Reserve now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<footer th:insert="~{fragments/footer.html}">
+</footer>
+</body>
+</html>
