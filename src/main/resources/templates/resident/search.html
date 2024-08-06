@@ -7,6 +7,10 @@
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}"/>
     <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.min.js}"></script>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css}"/>
+    <!-- jQuery UI library for javascript Calendar picking date-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <title>Search Property</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -20,7 +24,7 @@
                     <h2 class="text-center">Find parking in your neighborhood</h2>
                 </div>
                 <div class="card-body">
-                    <form method="post" th:action="@{/resident/search}" th:object="${garageFindDTO}">
+                    <form method="post" th:action="@{/resident/search}" th:object="${garageFindDTO}" onsubmit="capitalizeState()">
                         <div class="form-group mb-3">
                             <label class="form-label" for="city">City:</label>
                             <input class="form-control" id="city" type="text" th:field="*{city}"
@@ -54,5 +58,46 @@
     </div>
     <footer th:insert="~{fragments/footer.html}">
     </footer>
+    <script>
+        function capitalizeState() {
+            const stateInput = document.getElementById('state');
+            if (stateInput) {
+                stateInput.value = stateInput.value.toUpperCase();
+            }
+        }
+
+        $(function() {
+            const displayFormat = "mm-dd-yy";
+            const submitFormat = "yy-mm-dd";
+            const startDatePicker = $("#startDate");
+            const endDatePicker = $("#endDate");
+
+            startDatePicker.datepicker({
+                dateFormat: displayFormat,
+                minDate: 0,
+                onClose: function(selectedDate) {
+                    if (selectedDate) {
+                        const endMinDate = $.datepicker.parseDate(displayFormat, selectedDate);
+                        endMinDate.setDate(endMinDate.getDate() + 1);
+                        endDatePicker.datepicker("option", "minDate", endMinDate);
+                    }
+                }
+            }).attr('readonly', 'readonly');
+
+            endDatePicker.datepicker({
+                dateFormat: displayFormat,
+                minDate: +1
+            }).attr('readonly', 'readonly');
+
+            $("form").on("submit", function() {
+                const startDate = startDatePicker.datepicker('getDate');
+                const endDate = endDatePicker.datepicker('getDate');
+                startDatePicker.val($.datepicker.formatDate(submitFormat, startDate));
+                endDatePicker.val($.datepicker.formatDate(submitFormat, endDate));
+            });
+
+            startDatePicker.add(endDatePicker).attr("placeholder", "Select date");
+        });
+    </script>
 </body>
 </html>
