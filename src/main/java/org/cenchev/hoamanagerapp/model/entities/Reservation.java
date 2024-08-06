@@ -31,10 +31,10 @@ public class Reservation {
     private Home home;
 
     @Column(nullable = false)
-    private LocalDate checkinDate;
+    private LocalDate startDate;
 
     @Column(nullable = false)
-    private LocalDate checkoutDate;
+    private LocalDate endDate;
 
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReservedParking> bookedParking = new ArrayList<>();
@@ -90,20 +90,20 @@ public class Reservation {
         this.home = home;
     }
 
-    public LocalDate getCheckinDate() {
-        return checkinDate;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setCheckinDate(LocalDate checkinDate) {
-        this.checkinDate = checkinDate;
+    public void setStartDate(LocalDate checkinDate) {
+        this.startDate = checkinDate;
     }
 
-    public LocalDate getCheckoutDate() {
-        return checkoutDate;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public void setCheckoutDate(LocalDate checkoutDate) {
-        this.checkoutDate = checkoutDate;
+    public void setEndDate(LocalDate checkoutDate) {
+        this.endDate = checkoutDate;
     }
 
     public List<ReservedParking> getBookedParking() {

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}"/>
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css}"/>
+    <!-- jQuery UI library for javascript Calendar picking date-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <title>Search Property</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header th:insert="~{fragments/navbar.html}">
+    </header>
+    <div class="flex-grow-1 m-3">
+        <div class="container">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center">Find parking in your neighborhood</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" th:action="@{/resident/search}" th:object="${garageFindDTO}" onsubmit="capitalizeState()">
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="city">City:</label>
+                            <input class="form-control" id="city" type="text" th:field="*{city}"
+                                   placeholder="Enter city" autofocus>
+                            <p class="text-danger" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></p>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="state">State:</label>
+                            <input class="form-control" id="state" type="text" th:field="*{state}"
+                                   placeholder="Enter state" autofocus>
+                            <p class="text-danger" th:if="${#fields.hasErrors('state')}" th:errors="*{state}"></p>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="startDate">Reservation Start Date:</label>
+                            <input class="form-control" id="startDate" type="text" th:field="*{startDate}">
+                            <p class="text-danger" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></p>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="endDate">Reservation End Date:</label>
+                            <input class="form-control" id="endDate" type="text" th:field="*{endDate}">
+                            <p class="text-danger" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></p>
+                        </div>
+                        <div class="form-group mb-3">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <footer th:insert="~{fragments/footer.html}">
+    </footer>
+    <script>
+        function capitalizeState() {
+            const stateInput = document.getElementById('state');
+            if (stateInput) {
+                stateInput.value = stateInput.value.toUpperCase();
+            }
+        }
+
+        $(function() {
+            const displayFormat = "mm-dd-yy";
+            const submitFormat = "yy-mm-dd";
+            const startDatePicker = $("#startDate");
+            const endDatePicker = $("#endDate");
+
+            startDatePicker.datepicker({
+                dateFormat: displayFormat,
+                minDate: 0,
+                onClose: function(selectedDate) {
+                    if (selectedDate) {
+                        const endMinDate = $.datepicker.parseDate(displayFormat, selectedDate);
+                        endMinDate.setDate(endMinDate.getDate() + 1);
+                        endDatePicker.datepicker("option", "minDate", endMinDate);
+                    }
+                }
+            }).attr('readonly', 'readonly');
+
+            endDatePicker.datepicker({
+                dateFormat: displayFormat,
+                minDate: +1
+            }).attr('readonly', 'readonly');
+
+            $("form").on("submit", function() {
+                const startDate = startDatePicker.datepicker('getDate');
+                const endDate = endDatePicker.datepicker('getDate');
+                startDatePicker.val($.datepicker.formatDate(submitFormat, startDate));
+                endDatePicker.val($.datepicker.formatDate(submitFormat, endDate));
+            });
+
+            startDatePicker.add(endDatePicker).attr("placeholder", "Select date");
+        });
+    </script>
+</body>
+</html>

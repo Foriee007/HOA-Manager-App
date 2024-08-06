@@ -1,0 +1,28 @@
+.footer-ul{
+    display: flex;
+    flex-direction: row;
+    color: gray;
+    place-content: center;
+    padding-top: 20px;
+}
+
+.footer-ul > li{
+    list-style: none;
+    padding: 0px 10px;
+    border-right: 1px solid;
+}
+
+.footer-ul > li > form {
+    margin-left: 60px;
+}
+
+.footer-ul > li > form > select {
+    background: lightgray;
+    color: black;
+    margin-left: 5px;
+}
+
+.footer-ul > li > a{
+    color: inherit;
+    padding: 20px;
+}

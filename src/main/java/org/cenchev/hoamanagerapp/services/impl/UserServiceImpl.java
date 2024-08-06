@@ -66,16 +66,16 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUsername(formatEmailText(registerBindingModel.getUsername())); //uncapitalize
         user.setPassword(passwordEncoder.encode(registerBindingModel.getPassword()));
-        user.setFirstName(formatText(registerBindingModel.getFirstName()));
-        user.setLastName(formatText(registerBindingModel.getLastName()));
+        user.setFirstName(FormatTextCapitalWords.formatText(registerBindingModel.getFirstName()));
+        user.setLastName(FormatTextCapitalWords.formatText(registerBindingModel.getLastName()));
         user.setRole(userRole);
         return user;
 
     }
 
-    private String formatText(String text) {
+    /*private String formatText(String text) {
         return StringUtils.capitalize(text.trim());
-    }
+    }*/
     private String formatEmailText(String text) {
         return StringUtils.uncapitalize(text.trim());
     }
