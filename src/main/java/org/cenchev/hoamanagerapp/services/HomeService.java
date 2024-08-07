@@ -24,4 +24,5 @@ public interface HomeService {
 
     List<AvailableHomeParkingDTO> findAvailableHomesByLocationAndDate(String city, String state, LocalDate startDate, LocalDate endDate);
 
+    AvailableHomeParkingDTO findAvailableHomeById(Long id, LocalDate startDate, LocalDate endDate);
 }

@@ -5,6 +5,7 @@ import org.cenchev.hoamanagerapp.model.entities.Garage;
 import org.cenchev.hoamanagerapp.model.entities.Home;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GarageService {
     Garage saveGarage(GarageDTO garageDTO, Home home);
@@ -16,4 +17,6 @@ public interface GarageService {
     GarageDTO mapGarageSpotsToGarageDTO(Garage garage);
 
     Garage updateGarageSpots(GarageDTO garageDTO);
+
+    Optional<Garage> findGarageById(Long id);
 }

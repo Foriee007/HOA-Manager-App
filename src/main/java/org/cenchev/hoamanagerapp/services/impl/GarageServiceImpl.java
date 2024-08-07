@@ -9,6 +9,7 @@ import org.cenchev.hoamanagerapp.services.GarageService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,5 +70,10 @@ public class GarageServiceImpl implements GarageService {
         getExistingGarageSpot.setParkingCount(garageDTO.getParkingSpotCount());
         getExistingGarageSpot.setDayUsePrice(garageDTO.getPricePerDay());
         return garageRepository.save(getExistingGarageSpot);
+    }
+
+    @Override
+    public Optional<Garage> findGarageById(Long id) {
+        return garageRepository.findById(id);
     }
 }

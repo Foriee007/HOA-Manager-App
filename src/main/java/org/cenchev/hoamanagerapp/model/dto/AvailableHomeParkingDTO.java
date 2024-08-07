@@ -13,7 +13,9 @@ public class AvailableHomeParkingDTO {
     private List<GarageDTO> garageDTOList = new ArrayList<>();
 
     private Integer maxAvailableEVSpots;
+
     private Integer maxAvailableAllDaySpots;
+
     private String imageUrl;
 
     public AvailableHomeParkingDTO() {

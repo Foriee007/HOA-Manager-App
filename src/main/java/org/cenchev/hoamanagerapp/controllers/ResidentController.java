@@ -1,5 +1,6 @@
 package org.cenchev.hoamanagerapp.controllers;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.cenchev.hoamanagerapp.model.dto.AvailableHomeParkingDTO;
 import org.cenchev.hoamanagerapp.model.dto.GarageFindDTO;
@@ -85,6 +86,40 @@ public class ResidentController {
         return "resident/search-results";
     }
 
+
+    @GetMapping("/parking-details/{id}")
+        public String showHomeParkingDetails(@PathVariable Long id, @RequestParam String startDate, @RequestParam String endDate, Model model, RedirectAttributes redirectAttributes) {
+            try {
+                LocalDate parsedStartDate = LocalDate.parse(startDate);
+                LocalDate parsedEndDate = LocalDate.parse(endDate);
+                validateStartAndEndDates(parsedStartDate, parsedEndDate);
+
+                AvailableHomeParkingDTO availableHomeParkingDTO = homeService.findAvailableHomeById(id, parsedStartDate, parsedEndDate);
+
+                long durationDays = ChronoUnit.DAYS.between(parsedStartDate, parsedEndDate);
+
+                model.addAttribute("home", availableHomeParkingDTO);
+                model.addAttribute("days", durationDays);
+                model.addAttribute("startDate", startDate);
+                model.addAttribute("endDate", endDate);
+
+                return "/resident/parking-details";
+
+
+            } catch (DateTimeParseException e) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Incorrect date entry. Please use the search form.");
+                return "redirect:/resident/search";
+            } catch (IllegalArgumentException e) {
+                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+                return "redirect:/resident/search";
+            } catch (EntityNotFoundException e) {
+                redirectAttributes.addFlashAttribute("errorMessage", "The selected parking is no longer available. Please start a new search.");
+                return "redirect:/resident/search";
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("errorMessage", "An unexpected error occurred. Please try search again.");
+                return "redirect:/resident/search";
+            }
+        }
     private void validateStartAndEndDates(LocalDate startDate, LocalDate endDate) {
         if (startDate.isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Reservation start date cannot be in the past!");

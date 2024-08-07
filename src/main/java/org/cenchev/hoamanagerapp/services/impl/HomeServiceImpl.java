@@ -6,6 +6,7 @@ import org.cenchev.hoamanagerapp.exceptions.HomeEntityAlreadyExistsException;
 import org.cenchev.hoamanagerapp.exceptions.ObjectAlreadyExistsException;
 import org.cenchev.hoamanagerapp.model.dto.*;
 import org.cenchev.hoamanagerapp.model.entities.*;
+import org.cenchev.hoamanagerapp.model.enums.SpaceType;
 import org.cenchev.hoamanagerapp.repository.HomeRepository;
 import org.cenchev.hoamanagerapp.repository.ImageRepository;
 import org.cenchev.hoamanagerapp.services.*;
@@ -16,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +31,10 @@ public class HomeServiceImpl implements HomeService {
     private final GarageService garageService;
     private final UserService userService;
     private final PropertyManagerService propertyManagerService;
+    private final ParkAvailabilityService parkAvailabilityService;
 
 
-    public HomeServiceImpl(HomeRepository homeRepository, CloudinaryImageService cloudinaryImageService, ImageRepository imageRepository, AddressService addressService, GarageService garageService, UserService userService, PropertyManagerService propertyManagerService) {
+    public HomeServiceImpl(HomeRepository homeRepository, CloudinaryImageService cloudinaryImageService, ImageRepository imageRepository, AddressService addressService, GarageService garageService, UserService userService, PropertyManagerService propertyManagerService, ParkAvailabilityService parkAvailabilityService) {
         this.homeRepository = homeRepository;
         this.cloudinaryImageService = cloudinaryImageService;
         this.imageRepository = imageRepository;
@@ -41,6 +42,7 @@ public class HomeServiceImpl implements HomeService {
         this.garageService = garageService;
         this.userService = userService;
         this.propertyManagerService = propertyManagerService;
+        this.parkAvailabilityService = parkAvailabilityService;
     }
 
     @Override
@@ -188,10 +190,23 @@ public class HomeServiceImpl implements HomeService {
         List<Home> homesWithAvailableParking = homeRepository.findHomesByCityAndState(city, state);
 
 
-        return homesWithAvailableParking.stream().map(home -> mapHomeToHomesWithAvailableParking(home)).collect(Collectors.toList());
+        return homesWithAvailableParking.stream().map(home -> mapHomeToHomesWithAvailableParking(home, startDate, endDate)).collect(Collectors.toList());
     }
 
-    private AvailableHomeParkingDTO mapHomeToHomesWithAvailableParking(Home home) {
+    @Override
+    @Transactional
+    public AvailableHomeParkingDTO findAvailableHomeById(Long id, LocalDate startDate, LocalDate endDate) {
+        validStartAndEndDate(startDate, endDate);
+
+        Optional<Home> home = homeRepository.findById(id);
+        if (home.isEmpty()){
+            throw new EntityNotFoundException("Could not found home  with " + id);
+        }
+        Home homeAvailable = home.get();
+        return mapHomeToHomesWithAvailableParking(homeAvailable,startDate,endDate);
+    }
+    // To Do... Overriding  it to achieves Run Time Polymorphism
+    private AvailableHomeParkingDTO mapHomeToHomesWithAvailableParking(Home home, LocalDate startDate, LocalDate endDate) {
         List<GarageDTO> garageDTOs = home.getSpot().stream()
                 .map(garageService::mapGarageSpotsToGarageDTO)// convert garage to DTO format
                 .collect(Collectors.toList());
@@ -204,6 +219,20 @@ public class HomeServiceImpl implements HomeService {
         availableHomeParkingDTO.setAddressDTO(addressDTO);
         availableHomeParkingDTO.setGarageDTOList(garageDTOs);
         availableHomeParkingDTO.setImageUrl(home.getImage() != null ? home.getImage().getUrl() : null); // Set image URL
+
+
+        // Check what is Minimum available for each parking Type  for selected days
+        int maxAvailableEVSpots = home.getSpot().stream().filter(spot -> spot.getSpaceType() == SpaceType.EV)
+                //parkAvailability check via Query what garage id for which day is not available
+                // If none match the filter we got 0
+                .mapToInt(spot -> parkAvailabilityService.getMinParkingInventory(spot.getId(), startDate, endDate)).max().orElse(0);
+        availableHomeParkingDTO.setMaxAvailableEVSpots(maxAvailableEVSpots);
+
+        //Do same logic for next type "REGULAR" parking
+        int maxAvailableAllDaySpots = home.getSpot().stream().filter(spot -> spot.getSpaceType() == SpaceType.REGULAR)
+                .mapToInt(spot -> parkAvailabilityService.getMinParkingInventory(spot.getId(), startDate, endDate)).max().orElse(0);
+        availableHomeParkingDTO.setMaxAvailableAllDaySpots(maxAvailableAllDaySpots);
+
 
         return  availableHomeParkingDTO;
     }

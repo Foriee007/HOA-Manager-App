@@ -8,7 +8,7 @@
     <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.min.js}"></script>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <title>Search Property</title>
+    <title>Select Property</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
 <header th:insert="~{fragments/navbar.html}">
@@ -49,11 +49,11 @@
                                             <p class="card-text fw-bold">Available Parking</p>
                                             <div class="row">
                                                 <div class="col-6">
-                                                    <p class="card-text">EV parking: 1</p>
-                                                    <p class="card-text">All day parking: 1</p>
+                                                    <p class="card-text">EV parking:</p>
+                                                    <p class="card-text">All day parking:</p>
                                                 </div>
                                                 <div class="col-6">
-                                                   <!-- ToDo add business logic to get available spots-->
+                                                   <!-- business logic added-->
                                                     <p class="card-text"><span
                                                             th:text="${home.maxAvailableEVSpots}">0</span></p>
                                                     <p class="card-text"><span
@@ -76,15 +76,13 @@
                                 </div>
                             </div>
                             <div class="col-md-2 d-flex align-items-center">
-                                <a th:href="@{/resident/home-details/{id}(id=${home.id}, startDate=${startDate}, endDate=${endDate})}" class="btn btn-primary w-100 my-2 mx-3">Reserve now</a>
+                                <a th:href="@{/resident/parking-details/{id}(id=${home.id}, startDate=${startDate}, endDate=${endDate})}" class="btn btn-primary w-100 my-2 mx-3">Reserve now</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
 </div>
 <footer th:insert="~{fragments/footer.html}">
