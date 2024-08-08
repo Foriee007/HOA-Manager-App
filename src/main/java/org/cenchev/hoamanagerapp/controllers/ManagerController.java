@@ -134,6 +134,21 @@ public class ManagerController {
         return "redirect:/manager/homes";
     }
 
+    @GetMapping("/reservations")
+    public String listReservation(Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Long managerId = getCurrentManagerId();
+
+            return "manager/reservations";
+        } catch (EntityNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Reservations not found. Please try again later.");
+            return "redirect:/manager/dashboard";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "An unexpected error occurred. Please try again later.");
+            return "redirect:/manager/dashboard";
+        }
+    }
+
     private Long getCurrentUserId() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return userService.findUserByUsername(username).getPropertyManager().getId();

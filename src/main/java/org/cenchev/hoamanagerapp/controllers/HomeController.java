@@ -47,8 +47,8 @@ public class HomeController {
     private void sendEmail(ContactFormDTO contactForm) { // To Do -> set in separate service
         try {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo("your.account@gmail.com"); // Replace with your email address
-            message.setFrom("your.account@gmail.com");// Replace with your email address
+            message.setTo("priceless.laptop@gmail.com"); // Replace with your email address
+            message.setFrom("priceless.laptop@gmail.com");// Replace with your email address
             message.setSubject("New Contact Form Submission from " + contactForm.getName());
             message.setText("Email: " + contactForm.getEmail() + "\n\nMessage:\n" + contactForm.getMessage());
 
