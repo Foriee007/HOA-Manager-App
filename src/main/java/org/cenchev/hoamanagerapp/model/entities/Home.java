@@ -20,6 +20,7 @@ public class Home implements Serializable {
     private Address address;
 
     @OneToMany(mappedBy = "home", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@OneToMany(fetch = FetchType.EAGER)
     private List<Garage> spot = new ArrayList<>();
 
     @OneToMany(mappedBy = "home")

@@ -143,7 +143,7 @@ public class HomeServiceImplTest {
 
     @Test
     public void testFindAllHomesByManagerId() {
-        when(homeRepository.findAllByPropertyManagerId(anyLong())).thenReturn(Collections.singletonList(home));
+        when(homeRepository.findAllByPropertyManager_Id(anyLong())).thenReturn(Collections.singletonList(home));
 
         List<HomeDTO> homeDTOs = homeService.findAllHomesByManagerId(1L);
 
@@ -154,7 +154,7 @@ public class HomeServiceImplTest {
 
     @Test
     public void testFindAllHomesByManagerId_NoHomesFound() {
-        when(homeRepository.findAllByPropertyManagerId(anyLong())).thenReturn(Collections.emptyList());
+        when(homeRepository.findAllByPropertyManager_Id(anyLong())).thenReturn(Collections.emptyList());
 
         List<HomeDTO> homeDTOs = homeService.findAllHomesByManagerId(1L);
 

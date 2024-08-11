@@ -1,11 +1,19 @@
 package org.cenchev.hoamanagerapp.controllers;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.cenchev.hoamanagerapp.model.dto.AvailableHomeParkingDTO;
 import org.cenchev.hoamanagerapp.model.dto.GarageFindDTO;
+import org.cenchev.hoamanagerapp.model.dto.ReservationRequestDTO;
+import org.cenchev.hoamanagerapp.model.dto.UserDTO;
+import org.cenchev.hoamanagerapp.model.entities.Reservation;
 import org.cenchev.hoamanagerapp.services.HomeService;
+import org.cenchev.hoamanagerapp.services.ReservationService;
+import org.cenchev.hoamanagerapp.services.UserService;
 import org.cenchev.hoamanagerapp.services.impl.FormatTextCapitalWords;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,9 +29,13 @@ import java.util.List;
 @RequestMapping("/resident")
 public class ResidentController {
     private final HomeService homeService;
+    private final ReservationService reservationService;
+    private final UserService userService;
 
-    public ResidentController(HomeService homeService) {
+    public ResidentController(HomeService homeService, ReservationService reservationService, UserService userService) {
         this.homeService = homeService;
+        this.reservationService = reservationService;
+        this.userService = userService;
     }
 
     @GetMapping("/search")
@@ -54,7 +66,7 @@ public class ResidentController {
                                     @RequestParam String startDate, @RequestParam String endDate, Model model,
                                     RedirectAttributes redirectAttributes) {
         try {
-            String stateLetters = FormatTextCapitalWords.capitalizeAllLetters(state);
+            //String stateLetters = FormatTextCapitalWords.capitalizeAllLetters(state);
             LocalDate parsedStartDate = LocalDate.parse(startDate);
             LocalDate parsedEndDate = LocalDate.parse(endDate);
             validateStartAndEndDates(parsedStartDate, parsedEndDate);
@@ -103,7 +115,7 @@ public class ResidentController {
                 model.addAttribute("startDate", startDate);
                 model.addAttribute("endDate", endDate);
 
-                return "/resident/parking-details";
+                return "resident/parking-details";
 
 
             } catch (DateTimeParseException e) {
@@ -120,6 +132,35 @@ public class ResidentController {
                 return "redirect:/resident/search";
             }
         }
+
+
+    /*@PostMapping("/request")
+    public String sendReservationRequest(@ModelAttribute ReservationRequestDTO reservationRequestDTO, BindingResult result, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        session.setAttribute("reservationRequestDTO", reservationRequestDTO);
+
+        if (reservationRequestDTO == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Your session has expired. Please start a new search.");
+            return "redirect:/resident/search";
+        }
+
+
+        try {
+            Long userId = getLoggedInUserId();
+            Reservation reservation = reservationService.requestReservation(reservationRequestDTO, userId);
+            redirectAttributes.addFlashAttribute("bookingDTO", reservation);
+            return "redirect:/resident/dashboard";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "An unexpected error occurred. Please try again later.");
+            return "redirect:/resident/search-details";
+        }
+    }*/
+
+    private Long getLoggedInUserId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        UserDTO userDTO = userService.findUserDTOByUsername(username);
+        return userDTO.getId();
+    }
     private void validateStartAndEndDates(LocalDate startDate, LocalDate endDate) {
         if (startDate.isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Reservation start date cannot be in the past!");

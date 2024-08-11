@@ -42,12 +42,36 @@ public class Reservation {
     @OneToOne(mappedBy = "reservation")
     private Payment payment;
 
+    // New fields for isPaid and isApproved
+    @Column(nullable = false)
+    private boolean isPaid = false;
+
+
+    @Column(nullable = false)
+    private boolean isApproved = false;
+
     @PrePersist
     protected void onCreate() {
         this.confirmationNumber = UUID.randomUUID().toString().substring(0, 8);
     }
 
     public Reservation() {
+    }
+
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(boolean paid) {
+        isPaid = paid;
+    }
+
+    public boolean isApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(boolean approved) {
+        isApproved = approved;
     }
 
     public Long getId() {
@@ -94,16 +118,16 @@ public class Reservation {
         return startDate;
     }
 
-    public void setStartDate(LocalDate checkinDate) {
-        this.startDate = checkinDate;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
     public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate checkoutDate) {
-        this.endDate = checkoutDate;
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public List<ReservedParking> getBookedParking() {

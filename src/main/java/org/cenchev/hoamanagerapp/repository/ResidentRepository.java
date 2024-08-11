@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface ResidentRepository extends JpaRepository<Resident, Long> {
     Optional<Resident> findByUserId(Long userId);
 
-    @Query("SELECT c FROM Resident c WHERE c.user.username = :username")
-    Optional<Resident> findByUsername(@Param("username") String username);
+//    @Query("SELECT c FROM Resident c WHERE c.user.username = :username")
+//    Optional<Resident> findByUsername(@Param("username") String username);
 }

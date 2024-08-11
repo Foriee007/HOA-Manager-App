@@ -10,6 +10,7 @@ import org.cenchev.hoamanagerapp.model.enums.SpaceType;
 import org.cenchev.hoamanagerapp.repository.HomeRepository;
 import org.cenchev.hoamanagerapp.repository.ImageRepository;
 import org.cenchev.hoamanagerapp.services.*;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -34,7 +35,7 @@ public class HomeServiceImpl implements HomeService {
     private final ParkAvailabilityService parkAvailabilityService;
 
 
-    public HomeServiceImpl(HomeRepository homeRepository, CloudinaryImageService cloudinaryImageService, ImageRepository imageRepository, AddressService addressService, GarageService garageService, UserService userService, PropertyManagerService propertyManagerService, ParkAvailabilityService parkAvailabilityService) {
+    public HomeServiceImpl(HomeRepository homeRepository, CloudinaryImageService cloudinaryImageService, ImageRepository imageRepository, AddressService addressService, GarageService garageService, UserService userService, PropertyManagerService propertyManagerService, @Lazy ParkAvailabilityService parkAvailabilityService) {
         this.homeRepository = homeRepository;
         this.cloudinaryImageService = cloudinaryImageService;
         this.imageRepository = imageRepository;
@@ -81,7 +82,7 @@ public class HomeServiceImpl implements HomeService {
     @Override
     @Transactional
     public List<HomeDTO> findAllHomesByManagerId(Long managerId) {
-        List<Home> homes = homeRepository.findAllByPropertyManagerId(managerId);
+        List<Home> homes = homeRepository.findAllByPropertyManager_Id(managerId);
         if (homes != null) {
             List<HomeDTO> collect = homes.stream()
                     .map(this::mapHomeToHomeDto)
@@ -90,6 +91,8 @@ public class HomeServiceImpl implements HomeService {
         }
         return Collections.emptyList();
     }
+
+
 
     @Override
     public HomeDTO mapHomeToHomeDto(Home home) { // Use for  list homes, edit home
@@ -205,8 +208,24 @@ public class HomeServiceImpl implements HomeService {
         Home homeAvailable = home.get();
         return mapHomeToHomesWithAvailableParking(homeAvailable,startDate,endDate);
     }
+
+    @Override
+    public Optional<Home> findHomeById(long id) {
+        return homeRepository.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public HomeDTO findHomeDtoById(long id) {
+        Home home = homeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Home not found"));
+        return mapHomeToHomeDto(home);
+    }
+
     // To Do... Overriding  it to achieves Run Time Polymorphism
-    private AvailableHomeParkingDTO mapHomeToHomesWithAvailableParking(Home home, LocalDate startDate, LocalDate endDate) {
+    @Override
+    @Transactional
+    public AvailableHomeParkingDTO mapHomeToHomesWithAvailableParking(Home home, LocalDate startDate, LocalDate endDate) {
         List<GarageDTO> garageDTOs = home.getSpot().stream()
                 .map(garageService::mapGarageSpotsToGarageDTO)// convert garage to DTO format
                 .collect(Collectors.toList());
@@ -235,6 +254,12 @@ public class HomeServiceImpl implements HomeService {
 
 
         return  availableHomeParkingDTO;
+    }
+
+    @Override
+    public List<Home> findAllHomesByPropertyManagerId(Long managerId) {
+        List<Home> homes = homeRepository.findAllByPropertyManager_Id(managerId);
+        return (homes != null) ? homes : Collections.emptyList();
     }
 
 

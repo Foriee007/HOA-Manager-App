@@ -2,6 +2,7 @@ package org.cenchev.hoamanagerapp.services.impl;
 
 import org.cenchev.hoamanagerapp.exceptions.UserDuplicationException;
 import org.cenchev.hoamanagerapp.model.bindings.UserRegisterBindingModel;
+import org.cenchev.hoamanagerapp.model.dto.UserDTO;
 import org.cenchev.hoamanagerapp.model.entities.PropertyManager;
 import org.cenchev.hoamanagerapp.model.entities.Resident;
 import org.cenchev.hoamanagerapp.model.entities.Role;
@@ -12,6 +13,7 @@ import org.cenchev.hoamanagerapp.repository.ResidentRepository;
 import org.cenchev.hoamanagerapp.repository.RoleRepository;
 import org.cenchev.hoamanagerapp.repository.UserRepository;
 import org.cenchev.hoamanagerapp.services.UserService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -59,6 +61,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public UserDTO findUserDTOByUsername(String username) {
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findByUsername(username));
+        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+
+        return mapUserToUserDto(user);
+    }
+
+    private UserDTO mapUserToUserDto(User user) {
+        UserDTO userDto = new UserDTO();
+        userDto.setId(user.getId());
+        userDto.setUsername(user.getUsername());
+        userDto.setName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setRole(user.getRole());
+
+        return userDto;
     }
 
     private User mapRegistrationDtoToUser(UserRegisterBindingModel registerBindingModel) {

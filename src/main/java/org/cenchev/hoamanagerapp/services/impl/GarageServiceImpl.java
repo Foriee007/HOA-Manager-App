@@ -1,6 +1,7 @@
 package org.cenchev.hoamanagerapp.services.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.cenchev.hoamanagerapp.model.dto.GarageDTO;
 import org.cenchev.hoamanagerapp.model.entities.Garage;
 import org.cenchev.hoamanagerapp.model.entities.Home;
@@ -21,6 +22,7 @@ public class GarageServiceImpl implements GarageService {
     }
 
     @Override
+    @Transactional
     public Garage saveGarage(GarageDTO garageDTO, Home home) {
         Garage garage = mapGarageDTOToGarageSpot(garageDTO,home);
         //Successfully saved  (day_use_price, parking_count, space_type, home_id)
@@ -29,6 +31,7 @@ public class GarageServiceImpl implements GarageService {
     }
 
     @Override
+    @Transactional
     public List<Garage> saveGarageSpots(List<GarageDTO> garageDTOs, Home home) {  //referred  HoseService
         List<Garage> garageSpots = garageDTOs.stream()
                 .map(garageDTO -> saveGarage(garageDTO,home))
@@ -37,6 +40,7 @@ public class GarageServiceImpl implements GarageService {
     }
 
     @Override
+    @Transactional
     public Garage mapGarageDTOToGarageSpot(GarageDTO garageDTO, Home home) {
         Garage garage = new Garage();
         garage.setHome(home);

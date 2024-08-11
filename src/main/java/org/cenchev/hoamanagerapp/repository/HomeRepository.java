@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface HomeRepository extends JpaRepository<Home, Long> {
     Optional<Home> findByName(String name);
-    List<Home> findAllByPropertyManagerId(Long id);
+    List<Home> findAllByPropertyManager_Id(Long id);
 
     Optional<Home> findByIdAndPropertyManager_Id(Long id, Long propertyManagerId);
 

@@ -7,17 +7,99 @@
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}"/>
     <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.min.js}"></script>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css}"/>
-    <title>Search Property</title>
+    <title>Search Property Location</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
     <header th:insert="~{fragments/navbar.html}">
     </header>
     <div class="flex-grow-1 m-3">
         <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Reservation Search</h2>
+                    <!--<div th:if="${message}">
+                        <div class="alert alert-success" th:text="${message}">
+                        </div>
+                    </div>-->
+                    <table class="table table-striped align-middle">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Property</th>
+                            <th>Resident</th>
+                            <th>Email</th>
+                            <!--<th>EV Parking</th>-->
+                            <th>Car Parking</th>
+                            <th>Total Price</th>
+                            <th>Status</th>
+                            <th>Approve</th>
+                            <th>Delete</th>
+                            <!--<th>Edit</th>-->
 
-<!--          To Do...  Add table -->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="align-middle" th:each="reservation : ${reservations}">
+                            <td th:text="${reservation.id}"></td>
+                            <td th:text="${reservation.reservationDate}"></td>
+                            <td th:text="${reservation.startDate}"></td>
+                            <td th:text="${reservation.endDate}"></td>
+                            <td th:text="${reservation.homeName}"></td>
+                            <td th:text="${reservation.residentName}"></td>
+                            <td th:text="${reservation.residentEmail}"></td>
+                            <td>
+                                <ul>
+                                    <li th:each="garage : ${reservation.garageRequest}">
+                                        <span th:text="${garage.count}"></span> x <span th:text="${garage.spaceType}"></span>
+                                    </li>
+                                </ul>
+                            </td>
 
+                           <!-- <td th:each="garage : ${reservation.garageRequest}" th:if="${garage.spaceType.name() == 'EV'}"  th:text="${garage.count != null ? garage.count : 0}"></td>
+                            <td th:each="garage : ${reservation.garageRequest}" th:if="${garage.spaceType.name() == 'REGULAR'}" th:text="${garage.count != null ? garage.count : 0}"></td>-->
+                            <td >
+                                <span th:if="${reservation.isPaid}" th:text="${reservation.getTotalPrice()}"></span>
+                                <span th:if="${!reservation.isPaid}" th:text="'Not Paid'"></span>
+                            </td>
+                            <td>
+                                <span th:if="${reservation.isPaid}" th:text="'Paid'"></span>
+                                <span th:if="${!reservation.isPaid}" th:text="'Pending'"></span>
+                            </td>
+                            <td>
+                                <!-- Render the "Approve" button if the reservation is not approved -->
+                                <form method="post"
+                                      th:action="@{/manager/reservations/approved/{id}(id=${reservation.getId()})}"
+                                      th:if="${!reservation.isApproved}"
+                                      onsubmit="return confirm('Are you sure you want to approve this reservation?');">
+                                    <input type="hidden" name="_method" value=""/>
+                                    <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                </form>
 
+                                <!-- Render the "Approved" text if the reservation is already approved -->
+                                <button class="btn btn-secondary btn-sm" disabled th:if="${reservation.isApproved}">
+                                    Approved
+                                </button>
+                            </td>
+                            <td>
+                                <form method="post"
+                                      th:action="@{/manager/reservations/delete/{id}(id=${reservation.getId()})}"
+                                      th:if="${!reservation.isApproved}"
+                                      onsubmit="return confirm('Are you sure you want to delete this reservation?');">
+                                    <input type="hidden" name="_method" value="DELETE"/>
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                            <!--<td>
+                                <a th:href="@{/manager/homes/edit/{id}(id=${reservation.homeId})}">Edit</a>
+                            </td>-->
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
     <footer th:insert="~{fragments/footer.html}">

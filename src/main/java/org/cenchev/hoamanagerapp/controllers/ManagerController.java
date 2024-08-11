@@ -7,8 +7,10 @@ import org.cenchev.hoamanagerapp.exceptions.ObjectAlreadyExistsException;
 import org.cenchev.hoamanagerapp.model.dto.GarageDTO;
 import org.cenchev.hoamanagerapp.model.dto.HomeDTO;
 import org.cenchev.hoamanagerapp.model.dto.HomeRegistrationDTO;
+import org.cenchev.hoamanagerapp.model.dto.ReservationDTO;
 import org.cenchev.hoamanagerapp.model.enums.SpaceType;
 import org.cenchev.hoamanagerapp.services.HomeService;
+import org.cenchev.hoamanagerapp.services.ReservationService;
 import org.cenchev.hoamanagerapp.services.UserService;
 import org.cenchev.hoamanagerapp.services.impl.CloudinaryImageServiceImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,11 +31,13 @@ public class ManagerController {
     private final HomeService homeService;
     private final UserService userService;
     private final CloudinaryImageServiceImpl cloudinaryImageService;
+    private final ReservationService reservationService;
 
-    public ManagerController(HomeService homeService, UserService userService, CloudinaryImageServiceImpl cloudinaryImageService) {
+    public ManagerController(HomeService homeService, UserService userService, CloudinaryImageServiceImpl cloudinaryImageService, ReservationService reservationService) {
         this.homeService = homeService;
         this.userService = userService;
         this.cloudinaryImageService = cloudinaryImageService;
+        this.reservationService = reservationService;
     }
 
     @GetMapping("/dashboard")
@@ -78,7 +82,7 @@ public class ManagerController {
 
     @GetMapping("/homes")
     public String viewHomeByPropertyManagerId(Model model) {
-        Long propertyManagerId = getCurrentUserId();
+        Long propertyManagerId = getCurrentManagerId();
         List<HomeDTO> homesList = homeService.findAllHomesByManagerId(propertyManagerId);
         model.addAttribute("homes", homesList);
 
@@ -87,7 +91,7 @@ public class ManagerController {
 
     @GetMapping("/homes/edit/{id}")
     public String viewEditHomeForm(@PathVariable Long id, Model model) {
-        Long propertyManagerId = getCurrentUserId();
+        Long propertyManagerId = getCurrentManagerId();
         HomeDTO homeDTO = homeService.findHomeByIdAndPropertyManagerId(id, propertyManagerId);
         model.addAttribute("home", homeDTO);
         return "manager/edit-home";
@@ -128,18 +132,22 @@ public class ManagerController {
 
     @DeleteMapping("/homes/delete/{id}")
     public String deleteHome(@PathVariable("id") Long id) {
-        Long propertyManagerId = getCurrentUserId();
+        Long propertyManagerId = getCurrentManagerId();
         homeService.deleteHomeByIdAndManagerId(id, propertyManagerId);
 
         return "redirect:/manager/homes";
     }
 
     @GetMapping("/reservations")
-    public String listReservation(Model model, RedirectAttributes redirectAttributes) {
+    public String listReservationByManager(Model model, RedirectAttributes redirectAttributes) {
         try {
             Long managerId = getCurrentManagerId();
+            List<ReservationDTO> reservationDTOS = reservationService.findReservationByManagerId(managerId);
+            model.addAttribute("reservations", reservationDTOS);
+
 
             return "manager/reservations";
+
         } catch (EntityNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Reservations not found. Please try again later.");
             return "redirect:/manager/dashboard";
@@ -149,10 +157,10 @@ public class ManagerController {
         }
     }
 
-    private Long getCurrentUserId() {
+    /*private Long getCurrentUserId() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return userService.findUserByUsername(username).getPropertyManager().getId();
-    }
+    }*/
 
     private Long getCurrentManagerId() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

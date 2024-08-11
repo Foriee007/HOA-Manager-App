@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}"/>
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css}"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <title>Search Property</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header th:insert="~{fragments/navbar.html}">
+    </header>
+    <div class="flex-grow-1 m-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <!-- Display Property Details -->
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <p><strong th:text="${homeDTO.name}">Property Name</strong></p>
+                            <p class="mb-2" th:text="${homeDTO.getAddressDTO().getAddressLine()}">Address Line</p>
+                            <p th:text="${homeDTO.getAddressDTO().getCity() + ', ' + homeDTO.getAddressDTO().getState()}">City, state</p>
+                            <p class="mb-2" th:text="${homeDTO.getManagerUsername()}">Address Line</p>
+
+                        </div>
+                    </div>
+                    <!-- Start and End day  & Duration day -->
+                    <div class="card mb-2">
+                        <div class="row card-body">
+                            <div class="col">
+                                <p><strong>Start Day</strong></p>
+                                <p th:text="${reservationRequestDTO.getStartDate()}"></p>
+                            </div>
+                            <div class="col">
+                                <p><strong>End date</strong></p>
+                                <p th:text="${reservationRequestDTO.getEndDate()}"></p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Duration of stay:</strong></p>
+                            <p><span th:text="${days}"></span>days</p>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Selected garages:</strong></p>
+                            <div th:each="request : ${reservationRequestDTO.getGarageRequestDTOS()}"
+                                 th:if="${request.count > 0}">
+                                <p th:text="${request.getCount() + ' x ' + request.spaceType}">0 x Garage</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- submit request Form -->
+                <div class="col-md-8">
+                    <!-- Price Details -->
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h4><strong>Total Price:</strong></h4>
+                            <h4 th:utext="'$ ' + ${#numbers.formatDecimal(reservationRequestDTO.getTotalPrice(), 0, 'COMMA', 2, 'POINT')}">$0.00</h4>
+                        </div>
+                    </div>
+                    <!-- send button -->
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <form action="/reservation/submit" method="post"  >
+                                <h4><strong>Send to manager for Approve</strong></h4>
+                                <div class="form-group text-end">
+                                    <button type="submit" class="btn btn-primary">Send</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer th:insert="~{fragments/footer.html}">
+    </footer>
+</body>
+</html>

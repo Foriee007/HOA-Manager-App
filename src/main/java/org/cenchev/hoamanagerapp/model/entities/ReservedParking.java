@@ -32,7 +32,7 @@ public class ReservedParking {
         this.id = id;
     }
 
-    public SpaceType getspaceType() {
+    public SpaceType getSpaceType() {
         return spaceType;
     }
 

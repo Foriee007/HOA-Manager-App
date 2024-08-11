@@ -8,6 +8,7 @@ import org.cenchev.hoamanagerapp.model.entities.Home;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface HomeService {
     Home saveHome(HomeRegistrationDTO homeRegistrationDTO) throws IOException;
@@ -25,4 +26,11 @@ public interface HomeService {
     List<AvailableHomeParkingDTO> findAvailableHomesByLocationAndDate(String city, String state, LocalDate startDate, LocalDate endDate);
 
     AvailableHomeParkingDTO findAvailableHomeById(Long id, LocalDate startDate, LocalDate endDate);
+
+    Optional<Home> findHomeById(long id);
+
+    HomeDTO findHomeDtoById(long id);
+    AvailableHomeParkingDTO mapHomeToHomesWithAvailableParking(Home home, LocalDate startDate, LocalDate endDate);
+
+    List<Home> findAllHomesByPropertyManagerId(Long managerId);
 }

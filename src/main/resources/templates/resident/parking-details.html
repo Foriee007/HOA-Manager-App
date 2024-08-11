@@ -36,7 +36,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <form action="/reservation/initiate" method="post" id="booking-form">
+                    <form action="/reservation/request" method="post" id="booking-form">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
@@ -60,10 +60,10 @@
                                                 th:each="num : ${#numbers.sequence(0, home.maxAvailableAllDaySpots)}"
                                                 th:value="${num}" th:text="${num}"></option>
                                     </select>
-                                    <input type="hidden" th:name="${'garageSelections[' + iterStat.index + '].spaceType'}"
+                                    <input type="hidden" th:name="${'garageRequestDTOS[' + iterStat.index + '].spaceType'}"
                                            th:value="${garage.spaceType.name()}"/>
-                                    <input type="hidden" th:name="${'garageSelections[' + iterStat.index + '].count'}"
-                                           value="0" class="garage-count-input"/>
+                                    <input type="hidden" th:name="${'garageRequestDTOS[' + iterStat.index + '].count'}"
+                                           value="0" id="garageCountInput"/>
                                 </td>
                                 <td th:if="${iterStat.index == 0}" th:attr="rowspan=${#lists.size(home.garageDTOList)}">
                                     <div class="mb-2">
@@ -129,7 +129,7 @@
 
         garageSelect.on("change", function () {
             let count = $(this).val();
-            $(this).siblings(".garage-count-input").val(count);
+            $(this).siblings("#garageCountInput").val(count);
             calculateTotal();
         });
 

@@ -10,8 +10,8 @@ import java.util.List;
 public class HomeDTO {
     private Long id;
 
-    @NotBlank(message = "Garage name cannot be empty")
-    @Pattern(regexp = "^(?!\\s*$)[A-Za-z0-9 ]+$", message = "Garage name must only contain letters and numbers")
+    @NotBlank(message = "Property name cannot be empty")
+    @Pattern(regexp = "^(?!\\s*$)[A-Za-z0-9 ]+$", message = "Property name must only contain letters and numbers")
     private String name;
 
     @Valid
