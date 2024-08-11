@@ -89,7 +89,6 @@ public class ReservationServiceImpl implements ReservationService {
             totalPrice = reservation.getPayment().getTotalPrice();
         }
 
-
         ReservationDTO reservationDTO = new ReservationDTO();
                 reservationDTO.setId(reservation.getId());
                 reservationDTO.setReservationDate(reservation.getBookingDate());
